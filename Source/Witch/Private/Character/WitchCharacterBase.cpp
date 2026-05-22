@@ -2,6 +2,7 @@
 
 
 #include "Character/WitchCharacterBase.h"
+#include "AbilitySystemComponent.h"
 
 // Sets default values
 AWitchCharacterBase::AWitchCharacterBase()
@@ -29,6 +30,15 @@ void AWitchCharacterBase::BeginPlay()
 
 void AWitchCharacterBase::InitAbilityActorInfo()
 {
+}
+
+void AWitchCharacterBase::InitializePrimaryAttributes() const
+{
+	check(IsValid(GetAbilitySystemComponent()));
+	check(DefaultPrimaryAttributes);
+	const FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+	const FGameplayEffectSpecHandle SpecHandle =  GetAbilitySystemComponent()->MakeOutgoingSpec(DefaultPrimaryAttributes, 1.f, ContextHandle);
+	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), GetAbilitySystemComponent());
 }
 
 

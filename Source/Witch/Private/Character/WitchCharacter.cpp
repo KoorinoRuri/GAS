@@ -50,7 +50,6 @@ void AWitchCharacter::InitAbilityActorInfo()
 	AttributeSet = WitchPlayerState->GetAttributeSet();
 	
 	//至此 InitOverlay() 所需的参数都已经具备，可以在这里调用
-	
 	//获取controller，WitchPlayerController 在多人游戏中是可能为空的, 我们不希望游戏因此崩溃, 因此不应该使用（断言assert）: check
 	if (AWitchPlayerController* WitchPlayerController = Cast<AWitchPlayerController>(GetController()))
 	{	//只有本地玩家的HUD有效
@@ -59,5 +58,5 @@ void AWitchCharacter::InitAbilityActorInfo()
 			WitchHUD->InitOverlay(WitchPlayerController,WitchPlayerState,AbilitySystemComponent,AttributeSet);
 		}
 	}
-	
+	InitializePrimaryAttributes();
 }

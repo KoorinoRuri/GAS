@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "WitchCharacterBase.generated.h"
 
+class UGameplayEffect;
 class UAbilitySystemComponent;
 class UAttributeSet;
 
@@ -34,4 +35,10 @@ protected:
 	TObjectPtr<UAttributeSet> AttributeSet;
 	//InitAbilityActorInfo 在 AbilitySystemComponent_Abilities.cpp里有同名函数，但两者并不相同
 	virtual void InitAbilityActorInfo();
+	
+	//使用GE来初始化 PrimaryAttributes
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Attributes")
+	TSubclassOf<UGameplayEffect> DefaultPrimaryAttributes;
+	
+	void InitializePrimaryAttributes() const;
 };
