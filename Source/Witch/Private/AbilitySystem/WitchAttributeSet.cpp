@@ -23,13 +23,23 @@ void UWitchAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProper
 	//注册 health 进行复制；COND_None：无条件复制；REPNOTIFY_Always：只要在服务器上设置了值，就要进行复制，不论与原来的值相比是否有变化
 	DOREPLIFETIME_CONDITION_NOTIFY(UWitchAttributeSet,Health,COND_None,REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UWitchAttributeSet,MaxHealth,COND_None,REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UWitchAttributeSet,Mana,COND_None,REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UWitchAttributeSet,MaxMana,COND_None,REPNOTIFY_Always);
+
 	
 	DOREPLIFETIME_CONDITION_NOTIFY(UWitchAttributeSet,Strength,COND_None,REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UWitchAttributeSet,Intelligence,COND_None,REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UWitchAttributeSet,Resilience,COND_None,REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UWitchAttributeSet,Vigor,COND_None,REPNOTIFY_Always);
+	
+	DOREPLIFETIME_CONDITION_NOTIFY(UWitchAttributeSet,Armor,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UWitchAttributeSet,ArmorPenetration,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UWitchAttributeSet,BlockChance,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UWitchAttributeSet,CriticalHitChance,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UWitchAttributeSet,CriticalHitDamage,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UWitchAttributeSet,CriticalHitResistance,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UWitchAttributeSet,HealthRegeneration,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UWitchAttributeSet,ManaRegeneration,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UWitchAttributeSet,Mana,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UWitchAttributeSet,MaxMana,COND_None,REPNOTIFY_Always);
 	
 }
 
@@ -117,20 +127,12 @@ void UWitchAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) c
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UWitchAttributeSet,Health, OldHealth);
 }
 
-void UWitchAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth) const
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UWitchAttributeSet,MaxHealth, OldMaxHealth);
-}
 
 void UWitchAttributeSet::OnRep_Mana(const FGameplayAttributeData& OldMana) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UWitchAttributeSet,Mana, OldMana);
 }
 
-void UWitchAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UWitchAttributeSet,MaxMana, OldMaxMana);
-}
 
 void UWitchAttributeSet::OnRep_Strength(const FGameplayAttributeData& OldStrength) const
 {
@@ -150,4 +152,54 @@ void UWitchAttributeSet::OnRep_Resilience(const FGameplayAttributeData& OldResil
 void UWitchAttributeSet::OnRep_Vigor(const FGameplayAttributeData& OldVigor) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UWitchAttributeSet, Vigor, OldVigor);
+}
+
+void UWitchAttributeSet::OnRep_Armor(const FGameplayAttributeData& OldArmor) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UWitchAttributeSet, Vigor, OldArmor);
+}
+
+void UWitchAttributeSet::OnRep_ArmorPenetration(const FGameplayAttributeData& OldArmorPenetration) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UWitchAttributeSet, Vigor, OldArmorPenetration);
+}
+
+void UWitchAttributeSet::OnRep_BlockChance(const FGameplayAttributeData& OldBlockChance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UWitchAttributeSet, Vigor, OldBlockChance);
+}
+
+void UWitchAttributeSet::OnRep_CriticalHitChance(const FGameplayAttributeData& OldCriticalHitChance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UWitchAttributeSet, Vigor, OldCriticalHitChance);
+}
+
+void UWitchAttributeSet::OnRep_CriticalHitDamage(const FGameplayAttributeData& OldCriticalHitDamage) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UWitchAttributeSet, Vigor, OldCriticalHitDamage);
+}
+
+void UWitchAttributeSet::OnRep_CriticalHitResistance(const FGameplayAttributeData& OldCriticalHitResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UWitchAttributeSet, Vigor, OldCriticalHitResistance);
+}
+
+void UWitchAttributeSet::OnRep_HealthRegeneration(const FGameplayAttributeData& OldHealthRegeneration) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UWitchAttributeSet, Vigor, OldHealthRegeneration);
+}
+
+void UWitchAttributeSet::OnRep_ManaRegeneration(const FGameplayAttributeData& OldManaRegeneration) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UWitchAttributeSet, Vigor, OldManaRegeneration);
+}
+
+void UWitchAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UWitchAttributeSet,MaxHealth, OldMaxHealth);
+}
+
+void UWitchAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UWitchAttributeSet,MaxMana, OldMaxMana);
 }
