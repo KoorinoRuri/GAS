@@ -42,3 +42,9 @@ void AWitchEnemy::UnHighLightActor()
 	GetMesh()->SetRenderCustomDepth(false);
 	Weapon->SetRenderCustomDepth(false);
 }
+
+int32 AWitchEnemy::GetPlayerLevel()
+{
+	return Level;
+	
+}

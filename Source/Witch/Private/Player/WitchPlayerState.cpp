@@ -5,6 +5,7 @@
 
 #include "AbilitySystem/WitchAbilitySystemComponent.h"
 #include "AbilitySystem/WitchAttributeSet.h"
+#include "Net/UnrealNetwork.h"
 
 AWitchPlayerState::AWitchPlayerState()
 {
@@ -17,7 +18,19 @@ AWitchPlayerState::AWitchPlayerState()
 	AttributeSet  = CreateDefaultSubobject<UWitchAttributeSet>("AttributeSet");
 }
 
+void AWitchPlayerState::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AWitchPlayerState, Level)
+	
+}
+
 UAbilitySystemComponent* AWitchPlayerState::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+void AWitchPlayerState::OnRep_Level(int32 OldLevel) const
+{
+	
 }

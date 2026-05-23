@@ -39,6 +39,13 @@ void AWitchCharacter::OnRep_PlayerState()
 	InitAbilityActorInfo();
 }
 
+int32 AWitchCharacter::GetPlayerLevel()
+{
+	const AWitchPlayerState* WitchPlayerState = GetPlayerState<AWitchPlayerState>();
+	check(WitchPlayerState);
+	return WitchPlayerState->GetPlayerLevel();
+}
+
 void AWitchCharacter::InitAbilityActorInfo()
 {
 	AWitchPlayerState* WitchPlayerState = GetPlayerState<AWitchPlayerState>();
