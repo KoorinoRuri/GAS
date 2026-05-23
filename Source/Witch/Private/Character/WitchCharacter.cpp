@@ -58,5 +58,5 @@ void AWitchCharacter::InitAbilityActorInfo()
 			WitchHUD->InitOverlay(WitchPlayerController,WitchPlayerState,AbilitySystemComponent,AttributeSet);
 		}
 	}
-	InitializePrimaryAttributes();
+	InitializeDefaultAttributes();
 }

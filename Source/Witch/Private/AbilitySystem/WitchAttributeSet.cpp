@@ -11,9 +11,9 @@
 UWitchAttributeSet::UWitchAttributeSet()
 {
 	InitHealth(50.f);
-	InitMaxHealth(100.f);
+
 	InitMana(20.f);
-	InitMaxMana(50.f);
+
 }
 
 void UWitchAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
