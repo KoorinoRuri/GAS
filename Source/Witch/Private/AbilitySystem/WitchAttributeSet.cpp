@@ -10,9 +10,7 @@
 
 UWitchAttributeSet::UWitchAttributeSet()
 {
-	InitHealth(50.f);
-
-	InitMana(20.f);
+	
 
 }
 
