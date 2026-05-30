@@ -17,6 +17,8 @@ public:
 	//static 修饰成员函数，实际上和全局函数没什么区别，不许要通过该类的实例来调用
 	static const FWitchGameplayTags& Get(){ return GameplayTags; }
 	static void InitializeNativeGameplayTags();
+	
+	FGameplayTag Attributes_Secondary_Armor;
 protected:
 	
 private:
