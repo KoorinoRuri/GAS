@@ -45,6 +45,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetControllerParams(const FWidgetControllerParams& WCParams);
 	//任何继承了 WitchWIdgetController 的 widgetController 都能通过这个函数来广播自己独有的初始值
+	UFUNCTION(BlueprintCallable)
 	virtual void BroadcastInitialValues();
 	//用来绑定委托
 	virtual void BindCallbacksToDependencies();
