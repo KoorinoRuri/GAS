@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType, Blueprintable)
 class WITCH_API UAttributeMenuWidgetController : public UWitchWidgetController
 {
 	GENERATED_BODY()

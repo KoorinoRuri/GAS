@@ -24,3 +24,21 @@ UOverlayWidgetController* UWitchAbilitySystemLibrary::GetOverlayWidgetController
 	}
 	return nullptr;
 }
+
+UAttributeMenuWidgetController* UWitchAbilitySystemLibrary::GetAttributeMenuWidgetController(
+	const UObject* WorldContextObject)
+{
+	if (APlayerController* PC = UGameplayStatics::GetPlayerController(WorldContextObject,0))
+	{
+		if (AWitchHUD* WitchHUD = Cast<AWitchHUD>(PC->GetHUD()))
+		{
+			
+			AWitchPlayerState* PS = PC->GetPlayerState<AWitchPlayerState>();
+			UAbilitySystemComponent* ASC = PS->GetAbilitySystemComponent();
+			UAttributeSet* AS = PS->GetAttributeSet();
+			const FWidgetControllerParams WidgetControllerParams(PC,PS,ASC,AS);
+			return WitchHUD->GetAttributeMenuWidgetController(WidgetControllerParams);
+		}
+	}
+	return nullptr;
+}
