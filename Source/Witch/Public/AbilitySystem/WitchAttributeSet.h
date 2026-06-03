@@ -13,6 +13,10 @@
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+//这个委托类型指的是可以绑定一个函数的委托，没有参数但是有一个返回值
+//建立一个映射表，把GameplayTags对应到这些委托上，访问这个映射表，通过GameplayTags就能找到那个返回GameplayAttribute的静态函数
+//DECLARE_DELEGATE_RetVal(FGameplayAttribute, FAttributeSignature);
+
 USTRUCT()
 struct FEffectProperties
 {
@@ -47,6 +51,15 @@ struct FEffectProperties
 	ACharacter* TargetCharacter = nullptr;
 };
 
+//别名
+//typedef TBaseStaticDelegateInstance<FGameplayAttribute(), FDefaultDelegateUserPolicy>::FFuncPtr FAttributeFuncPtr;
+
+//模板别名
+//TTStaticFuncPtr 本质上是函数指针，可以保存任意函数签名的函数地址，例如：TStaticFuncPtr<float(int32, float, int 32)> RandomFunctionPtr
+//相比 typedef 更通用
+template<class T>
+using TStaticFuncPtr = TBaseStaticDelegateInstance<T, FDefaultDelegateUserPolicy>::FFuncPtr;
+
 
 /**
  * 
@@ -63,7 +76,19 @@ public:
 	//继承自UAttributeSet
 	virtual void PreAttributeBaseChange(const FGameplayAttribute& Attribute, float& NewValue) const override;
 	
-	 virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
+	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
+	
+	//存attribute没意义，要的是通过GetAttribute函数拿到的已经刷新的即时属性，所以核心是要通过map激活这个GetAttribute函数
+	//TMap<FGameplayTag, FAttributeSignature> TagsToAttributes;
+	
+	//相当于映射到具有特定签名的函数指针类型上了
+	//TMap<FGameplayTag, TBaseStaticDelegateInstance<FGameplayAttribute(), FDefaultDelegateUserPolicy>::FFuncPtr> TagsToAttributes;
+	//TMap<FGameplayTag, FGameplayAttribute(*)()> TagsToAttributes;
+	TMap<FGameplayTag, TStaticFuncPtr<FGameplayAttribute()>> TagsToAttributes;
+	
+	//现在的类型是：一个函数指针，没参数，返回 FGameplayAttribute
+	//TBaseStaticDelegateInstance<FGameplayAttribute(), FDefaultDelegateUserPolicy>::FFuncPtr FunctionPointer;
+	
 	
 	/*
 	 * Primary Attributes

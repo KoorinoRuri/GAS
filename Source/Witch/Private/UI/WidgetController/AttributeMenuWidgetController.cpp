@@ -17,8 +17,19 @@ void UAttributeMenuWidgetController::BroadcastInitialValues()
 	
 	check(AttributeInfo);
 	
-	FWitchAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(FWitchGameplayTags::Get().Attributes_Primary_Strength);
+	/*FWitchAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(FWitchGameplayTags::Get().Attributes_Primary_Strength);
 	
 	Info.AttributeValue = AS->GetStrength();
-	AttributeInfoDelegate.Broadcast(Info);
+	AttributeInfoDelegate.Broadcast(Info);*/
+	
+	//广播初始值时，不需要知道属性有多少，也不必知道有哪些属性
+	for (auto& Pair : AS->TagsToAttributes)
+	{
+		FWitchAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(Pair.Key);
+		//执行委托
+		//FGameplayAttribute Attr = Pair.Value.Execute();
+		
+		Info.AttributeValue = Pair.Value().GetNumericValue(AS);
+		AttributeInfoDelegate.Broadcast(Info);
+	}
 }

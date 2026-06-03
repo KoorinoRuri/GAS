@@ -6,11 +6,32 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GameFramework/Character.h"
 #include "GameplayEffectExtension.h"
+#include "LocalizationDescriptor.h"
 #include "Net/UnrealNetwork.h"
+#include "WitchGameplayTags.h"
 
 UWitchAttributeSet::UWitchAttributeSet()
 {
+	//因为GameplayTags是单例模式
+	const FWitchGameplayTags& GameplayTags = FWitchGameplayTags::Get();
 	
+	//委托写法
+	/*FAttributeSignature StrengthDelegate;
+	StrengthDelegate.BindStatic(UWitchAttributeSet::GetStrengthAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Strength, StrengthDelegate);
+	
+	FAttributeSignature IntelligenceDelegate;
+	IntelligenceDelegate.BindStatic(UWitchAttributeSet::GetIntelligenceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Intelligence, IntelligenceDelegate);*/
+	
+	//只需要函数名不需要括号，也就是函数地址
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Strength, GetStrengthAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Intelligence, GetIntelligenceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Resilience, GetResilienceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Vigor, GetVigorAttribute);
+	
+	//等号左侧其实是一个变量，可以存储一个带有等号右侧这种签名的函数
+	//FunctionPointer = GetIntelligenceAttribute;
 
 }
 
