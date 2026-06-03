@@ -3,6 +3,7 @@
 
 #include "Character/WitchCharacterBase.h"
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/WitchAbilitySystemComponent.h"
 
 // Sets default values
 AWitchCharacterBase::AWitchCharacterBase()
@@ -47,6 +48,17 @@ void AWitchCharacterBase::InitializeDefaultAttributes() const
 	ApplyEffectToSelf(DefaultPrimaryAttributes, 1.f);
 	ApplyEffectToSelf(DefaultSecondaryAttributes, 1.f);
 	ApplyEffectToSelf(DefaultVitalAttributes, 1.f);
+}
+
+void AWitchCharacterBase::AddCharacterAbilities()
+{
+	UWitchAbilitySystemComponent* WitchASC = CastChecked<UWitchAbilitySystemComponent>(AbilitySystemComponent);
+	
+	//只应在服务端添加能力，需要检查权限
+	if (!HasAuthority()) return;
+	WitchASC->AddCharacterAbilities(StartupAbilities);
+	
+	
 }
 
 

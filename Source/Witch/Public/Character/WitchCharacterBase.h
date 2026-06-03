@@ -11,6 +11,7 @@
 class UGameplayEffect;
 class UAbilitySystemComponent;
 class UAttributeSet;
+class UGameplayAbility;
 
 UCLASS(Abstract)
 class WITCH_API AWitchCharacterBase : public ACharacter, public IAbilitySystemInterface, public ICombatInterface
@@ -51,4 +52,11 @@ protected:
 	
 	void InitializeDefaultAttributes() const;
 	
+	void AddCharacterAbilities();
+	
+private:
+	
+	UPROPERTY(EditAnywhere, Category="Abilities")
+	//游戏一开始就被赋予的能力
+	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
 };

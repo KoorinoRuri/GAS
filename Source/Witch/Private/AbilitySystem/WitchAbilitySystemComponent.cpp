@@ -13,6 +13,20 @@ void UWitchAbilitySystemComponent::AbilityActorInfoSet()
 	//GEngine->AddOnScreenDebugMessage(-1,10.f,FColor::Green,FString::Printf(TEXT("Tag : %s"), *GameplayTags.Attributes_Secondary_Armor.ToString()));
 }
 
+void UWitchAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities)
+{
+	for (const TSubclassOf<UGameplayAbility> AbilityClass : StartupAbilities)
+	{
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
+		
+		//const 和 非const 都可以
+		//GiveAbility(AbilitySpec);
+		
+		//不能是const
+		GiveAbilityAndActivateOnce(AbilitySpec);
+	}
+}
+
 //通过委托，可以在运行时获取某个GameplayEffect正在应用的信息
 void UWitchAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* AbilitySystemComponent,
                                                  const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveGameplayEffectHandle)
