@@ -2,7 +2,10 @@
 
 
 #include "Player/WitchPlayerController.h"
+
+#include "AbilitySystemBlueprintLibrary.h"
 #include "EnhancedInputSubsystems.h"
+#include "AbilitySystem/WitchAbilitySystemComponent.h"
 #include "Input/WitchInputComponent.h"
 #include "Interaction/EnemyInterface.h"
 
@@ -118,10 +121,22 @@ void AWitchPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 
 void AWitchPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
-	
+	if (GetASC() == nullptr) return;
+	GetASC()->AbilityInputTagsReleased(InputTag);
 }
 
 void AWitchPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
-	
+	if (GetASC() == nullptr) return;
+	//具体按下输入时发生的事，交给 AbilitySystemComponent 自己处理
+	GetASC()->AbilityInputTagHeld(InputTag);
+}
+
+UWitchAbilitySystemComponent* AWitchPlayerController::GetASC()
+{
+	if (WitchAbilitySystemComponent == nullptr)
+	{
+		WitchAbilitySystemComponent = Cast<UWitchAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn<APawn>()));
+	}
+	return WitchAbilitySystemComponent;
 }

@@ -12,7 +12,7 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 class IEnemyInterface;
-
+class UWitchAbilitySystemComponent;
 /**
  * 
  */
@@ -47,4 +47,10 @@ private:
 	
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	TObjectPtr<UWitchInputConfig> InputConfig;
+	
+	//避免在 Held 时每帧都需要进行 cast
+	UPROPERTY()
+	TObjectPtr<UWitchAbilitySystemComponent> WitchAbilitySystemComponent;
+	
+	UWitchAbilitySystemComponent* GetASC();
 };

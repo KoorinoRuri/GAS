@@ -26,6 +26,10 @@ public:
 	
 	void AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities);
 	
+	//用来激活 Ability
+	void AbilityInputTagHeld(const FGameplayTag& InputTag);
+	void AbilityInputTagsReleased(const FGameplayTag& InputTag);
+	
 protected:
 	//FOnGameplayEffectAppliedDelegate的回调函数
 	void EffectApplied(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveGameplayEffectHandle);
