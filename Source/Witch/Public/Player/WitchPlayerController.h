@@ -6,6 +6,8 @@
 #include "GameFramework/PlayerController.h"
 #include "WitchPlayerController.generated.h"
 
+struct FGameplayTag;
+class UWitchInputConfig;
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
@@ -38,4 +40,11 @@ private:
 	IEnemyInterface* LastActor;
 	IEnemyInterface* CurrentActor;
 	
+	void AbilityInputTagPressed(FGameplayTag InputTag);
+	void AbilityInputTagReleased(FGameplayTag InputTag);
+	void AbilityInputTagHeld(FGameplayTag InputTag);
+	
+	
+	UPROPERTY(EditDefaultsOnly, Category="Input")
+	TObjectPtr<UWitchInputConfig> InputConfig;
 };

@@ -3,7 +3,7 @@
 
 #include "Player/WitchPlayerController.h"
 #include "EnhancedInputSubsystems.h"
-#include "EnhancedInputComponent.h"
+#include "Input/WitchInputComponent.h"
 #include "Interaction/EnemyInterface.h"
 
 AWitchPlayerController::AWitchPlayerController()
@@ -42,9 +42,10 @@ void AWitchPlayerController::BeginPlay()
 void AWitchPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
-	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
-	EnhancedInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AWitchPlayerController::Move);
+	UWitchInputComponent* WitchInputComponent = CastChecked<UWitchInputComponent>(InputComponent);
+	WitchInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AWitchPlayerController::Move);
 	
+	WitchInputComponent->BindAbilityActions(InputConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 }
 
 void AWitchPlayerController::Move(const FInputActionValue& InputActionValue)
@@ -108,4 +109,19 @@ void AWitchPlayerController::CursorTrace()
 			}
 		}
 	}
+}
+
+void AWitchPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
+{
+	
+}
+
+void AWitchPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
+{
+	
+}
+
+void AWitchPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
+{
+	
 }
