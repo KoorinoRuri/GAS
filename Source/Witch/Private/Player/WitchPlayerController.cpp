@@ -5,13 +5,17 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "EnhancedInputSubsystems.h"
+#include "WitchGameplayTags.h"
 #include "AbilitySystem/WitchAbilitySystemComponent.h"
+#include "Components/SplineComponent.h"
 #include "Input/WitchInputComponent.h"
 #include "Interaction/EnemyInterface.h"
 
 AWitchPlayerController::AWitchPlayerController()
 {
 	bReplicates = true;
+	
+	Spline = CreateDefaultSubobject<USplineComponent>("Spline");
 }
 
 void AWitchPlayerController::PlayerTick(float DeltaTime)
@@ -116,6 +120,11 @@ void AWitchPlayerController::CursorTrace()
 
 void AWitchPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
+	if (InputTag.MatchesTagExact(FWitchGameplayTags::Get().InputTag_RMB))
+	{
+		bTargeting = CurrentActor ? true : false;
+		bAutoRunning = false;
+	}
 	
 }
 
@@ -127,9 +136,42 @@ void AWitchPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 
 void AWitchPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
-	if (GetASC() == nullptr) return;
-	//具体按下输入时发生的事，交给 AbilitySystemComponent 自己处理
-	GetASC()->AbilityInputTagHeld(InputTag);
+	
+	if (!InputTag.MatchesTagExact(FWitchGameplayTags::Get().InputTag_RMB))
+	{
+		if (GetASC())
+		{
+			//具体按下输入时发生的事，交给 AbilitySystemComponent 自己处理
+			GetASC()->AbilityInputTagHeld(InputTag);
+		}
+		return;
+	}
+	
+	if (bTargeting)
+	{
+		if (GetASC())
+		{
+			//具体按下输入时发生的事，交给 AbilitySystemComponent 自己处理
+			GetASC()->AbilityInputTagHeld(InputTag);
+		}
+	}
+	else//移动
+	{
+		FollowTime += GetWorld()->GetDeltaSeconds();
+		FHitResult HitResult;
+		if (GetHitResultUnderCursor(ECC_Visibility,false,HitResult))
+		{
+			CachedDestination = HitResult.ImpactPoint;
+		}
+		
+		//获取control pawn
+		if (APawn* ControlledPawn = GetPawn())
+		{
+			const FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
+			ControlledPawn->AddMovementInput(WorldDirection);
+		}
+	}
+	
 }
 
 UWitchAbilitySystemComponent* AWitchPlayerController::GetASC()
