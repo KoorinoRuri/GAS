@@ -5,6 +5,8 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "EnhancedInputSubsystems.h"
+#include "NavigationPath.h"
+#include "NavigationSystem.h"
 #include "WitchGameplayTags.h"
 #include "AbilitySystem/WitchAbilitySystemComponent.h"
 #include "Components/SplineComponent.h"
@@ -130,13 +132,48 @@ void AWitchPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 
 void AWitchPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
-	if (GetASC() == nullptr) return;
-	GetASC()->AbilityInputTagsReleased(InputTag);
+	if (!InputTag.MatchesTagExact(FWitchGameplayTags::Get().InputTag_RMB))
+	{
+		if (GetASC())
+		{
+			//具体按下输入时发生的事，交给 AbilitySystemComponent 自己处理
+			GetASC()->AbilityInputTagsReleased(InputTag);
+		}
+		return;
+	}
+	if (bTargeting)
+	{
+		if (GetASC())
+		{
+			//具体按下输入时发生的事，交给 AbilitySystemComponent 自己处理
+			GetASC()->AbilityInputTagsReleased(InputTag);
+		}
+	}
+	else
+	{
+		APawn* ControlledPawn = GetPawn();
+		if (FollowTime <= ShortPressThreshold && ControlledPawn)
+		{
+			if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(this, ControlledPawn->GetActorLocation(), CachedDestination))
+			{
+				Spline->ClearSplinePoints();
+				//将路径上的点加入到样条曲线
+				for (const FVector& PointLoc : NavPath->PathPoints)
+				{
+					Spline->AddSplinePoint(PointLoc, ESplineCoordinateSpace::World);
+					DrawDebugSphere(GetWorld(), PointLoc, 8.f, 8, FColor::Green, false, 5.f);
+				}
+				bAutoRunning = true;
+			}
+		}
+		FollowTime = 0.f;
+		bTargeting = false;
+	}
 }
 
 void AWitchPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
-	
+	//如果不是鼠标右键
 	if (!InputTag.MatchesTagExact(FWitchGameplayTags::Get().InputTag_RMB))
 	{
 		if (GetASC())
@@ -146,8 +183,8 @@ void AWitchPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 		}
 		return;
 	}
-	
-	if (bTargeting)
+	//如果是鼠标右键
+	if (bTargeting)//此处逻辑是，例如有一个喷火技能，我们在按住鼠标移动时，此时鼠标没落到敌人身上，我们移动，一旦滑到敌人身上，角色就会释放喷火技能
 	{
 		if (GetASC())
 		{
