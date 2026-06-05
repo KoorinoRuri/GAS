@@ -41,6 +41,7 @@ private:
 	IEnemyInterface* LastActor;
 	//This Actor
 	IEnemyInterface* CurrentActor;
+	FHitResult CursorHit;
 	
 	void AbilityInputTagPressed(FGameplayTag InputTag);
 	void AbilityInputTagReleased(FGameplayTag InputTag);

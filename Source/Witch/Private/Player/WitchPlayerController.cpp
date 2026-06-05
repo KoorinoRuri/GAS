@@ -98,7 +98,7 @@ void AWitchPlayerController::Move(const FInputActionValue& InputActionValue)
 
 void AWitchPlayerController::CursorTrace()
 {
-	FHitResult CursorHit;
+	
 	GetHitResultUnderCursor(ECC_Visibility,false,CursorHit);
 	if (!CursorHit.bBlockingHit) return;
 	
@@ -118,7 +118,8 @@ void AWitchPlayerController::CursorTrace()
 	 * E: Both != nullptr && LastActor == CurrentActor
 	 *  - Do Nothing
 	 */
-	if (LastActor == nullptr)
+	
+	/*if (LastActor == nullptr)
 	{
 		if (CurrentActor != nullptr)// Case B
 		{
@@ -139,6 +140,12 @@ void AWitchPlayerController::CursorTrace()
 				CurrentActor->HighLightActor();
 			}
 		}
+	}*/
+	
+	if (LastActor != CurrentActor)
+	{
+		if (LastActor) LastActor->UnHighLightActor();
+		if (CurrentActor) CurrentActor->HighLightActor();
 	}
 }
 
@@ -173,7 +180,7 @@ void AWitchPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 	}
 	else
 	{
-		APawn* ControlledPawn = GetPawn();
+		const APawn* ControlledPawn = GetPawn();
 		if (FollowTime <= ShortPressThreshold && ControlledPawn)
 		{
 			if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(this, ControlledPawn->GetActorLocation(), CachedDestination))
@@ -183,7 +190,7 @@ void AWitchPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 				for (const FVector& PointLoc : NavPath->PathPoints)
 				{
 					Spline->AddSplinePoint(PointLoc, ESplineCoordinateSpace::World);
-					DrawDebugSphere(GetWorld(), PointLoc, 8.f, 8, FColor::Green, false, 5.f);
+					//DrawDebugSphere(GetWorld(), PointLoc, 8.f, 8, FColor::Green, false, 5.f);
 				}
 				//目前存在bug：NavPath->PathPoints可能为空
 				//CachedDestination = NavPath->PathPoints[NavPath->PathPoints.Num() - 1];
@@ -219,10 +226,9 @@ void AWitchPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 	else//移动
 	{
 		FollowTime += GetWorld()->GetDeltaSeconds();
-		FHitResult HitResult;
-		if (GetHitResultUnderCursor(ECC_Visibility,false,HitResult))
+		if (CursorHit.bBlockingHit)
 		{
-			CachedDestination = HitResult.ImpactPoint;
+			CachedDestination = CursorHit.ImpactPoint;
 		}
 		
 		//获取control pawn

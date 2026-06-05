@@ -8,7 +8,8 @@
 
 void UWitchAbilitySystemComponent::AbilityActorInfoSet()
 {
-	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &UWitchAbilitySystemComponent::EffectApplied);
+	//只会在服务端调用，因此会导致客户端拾取道具没有窗口提示，需要把回调函数设置为RPC
+	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &UWitchAbilitySystemComponent::ClientEffectApplied);
 	
 	//const FWitchGameplayTags& GameplayTags = FWitchGameplayTags::Get();
 	//GEngine->AddOnScreenDebugMessage(-1,10.f,FColor::Green,FString::Printf(TEXT("Tag : %s"), *GameplayTags.Attributes_Secondary_Armor.ToString()));
@@ -77,7 +78,7 @@ void UWitchAbilitySystemComponent::AbilityInputTagsReleased(const FGameplayTag& 
 }
 
 //通过委托，可以在运行时获取某个GameplayEffect正在应用的信息
-void UWitchAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* AbilitySystemComponent,
+void UWitchAbilitySystemComponent::ClientEffectApplied_Implementation(UAbilitySystemComponent* AbilitySystemComponent,
                                                  const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveGameplayEffectHandle)
 {
 	//GEngine->AddOnScreenDebugMessage(1,8.f, FColor::Green,FString("EffectApplied"));
