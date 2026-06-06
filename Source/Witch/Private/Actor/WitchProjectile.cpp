@@ -12,6 +12,9 @@ AWitchProjectile::AWitchProjectile()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	//在服务器端生成，让服务器负责计算他的运动等，客户端只看到他的复制版本
+	bReplicates = true;
+	
 	Sphere = CreateDefaultSubobject<USphereComponent>("Sphere");
 	SetRootComponent(Sphere);
 	Sphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);

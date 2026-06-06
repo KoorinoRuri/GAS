@@ -29,6 +29,12 @@ void AWitchCharacterBase::BeginPlay()
 	
 }
 
+FVector AWitchCharacterBase::GetCombatSocketLocation()
+{
+	check(Weapon);
+	return Weapon->GetSocketLocation(WeaponTipSocketName);
+}
+
 void AWitchCharacterBase::InitAbilityActorInfo()
 {
 }
