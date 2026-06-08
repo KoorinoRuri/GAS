@@ -6,14 +6,22 @@
 #include "Actor/WitchProjectile.h"
 #include "Interaction/CombatInterface.h"
 
+//Ability激活时自动执行
 void UWitchProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
                                             const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
                                             const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 	
+	
+	
+	
+}
+
+void UWitchProjectileSpell::SpawnProjectile()
+{
 	//仅在服务端时才进行生成
-	const bool bIsServer = HasAuthority(&ActivationInfo);
+	const bool bIsServer = GetAvatarActorFromActorInfo()->HasAuthority();
 	if (!bIsServer) return;
 	
 	ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo());
@@ -35,6 +43,4 @@ void UWitchProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Han
 		
 		Projectile->FinishSpawning(SpawnTransform);
 	}
-	
-	
 }

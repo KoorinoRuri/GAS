@@ -20,6 +20,9 @@ protected:
 	//此函数位于 GameplayAbilities.h
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 	
+	UFUNCTION(BlueprintCallable, Category="Projectile")
+	void SpawnProjectile();
+	
 	//要生成的子弹类型
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<AWitchProjectile> ProjectileClass;
