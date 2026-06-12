@@ -2,6 +2,8 @@
 
 
 #include "WitchAssetManager.h"
+
+#include "AbilitySystemGlobals.h"
 #include "WitchGameplayTags.h"
 
 
@@ -18,4 +20,6 @@ void UWitchAssetManager::StartInitialLoading()
 {
 	Super::StartInitialLoading();
 	FWitchGameplayTags::InitializeNativeGameplayTags();
+	//使用 TargetData 时，必须先调用这个函数初始化一些东西
+	UAbilitySystemGlobals::Get().InitGlobalData();
 }
