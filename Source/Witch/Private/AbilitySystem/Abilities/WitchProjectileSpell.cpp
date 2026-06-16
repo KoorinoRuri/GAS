@@ -18,7 +18,7 @@ void UWitchProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Han
 	
 }
 
-void UWitchProjectileSpell::SpawnProjectile()
+void UWitchProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation)
 {
 	//仅在服务端时才进行生成
 	const bool bIsServer = GetAvatarActorFromActorInfo()->HasAuthority();
@@ -29,9 +29,13 @@ void UWitchProjectileSpell::SpawnProjectile()
 	{
 		const FVector SocketLocation = CombatInterface->GetCombatSocketLocation();
 		
+		FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
+		Rotation.Pitch = 0.f;
+		
 		FTransform SpawnTransform;
-		//TODO : Set the Rotation
 		SpawnTransform.SetLocation(SocketLocation);
+		SpawnTransform.SetRotation(Rotation.Quaternion());
+		
 		AWitchProjectile* Projectile = GetWorld()->SpawnActorDeferred<AWitchProjectile>(
 			ProjectileClass, 
 			SpawnTransform, 

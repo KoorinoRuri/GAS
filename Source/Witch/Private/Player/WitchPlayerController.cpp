@@ -75,7 +75,8 @@ void AWitchPlayerController::SetupInputComponent()
 	Super::SetupInputComponent();
 	UWitchInputComponent* WitchInputComponent = CastChecked<UWitchInputComponent>(InputComponent);
 	WitchInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AWitchPlayerController::Move);
-	
+	WitchInputComponent->BindAction(ShiftAction, ETriggerEvent::Started, this, &AWitchPlayerController::ShiftPressed);
+	WitchInputComponent->BindAction(ShiftAction, ETriggerEvent::Completed, this, &AWitchPlayerController::ShiftReleased);
 	WitchInputComponent->BindAbilityActions(InputConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 }
 
@@ -170,15 +171,15 @@ void AWitchPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 		}
 		return;
 	}
-	if (bTargeting)
+	
+	//无论如何都会通知ASC，输入已经释放
+	if (GetASC())
 	{
-		if (GetASC())
-		{
-			//具体按下输入时发生的事，交给 AbilitySystemComponent 自己处理
-			GetASC()->AbilityInputTagsReleased(InputTag);
-		}
+		//具体按下输入时发生的事，交给 AbilitySystemComponent 自己处理
+		GetASC()->AbilityInputTagsReleased(InputTag);
 	}
-	else
+	//只有未在targeting并且未按住shift时，才检测短按以判断是否停止移动
+	if (!bTargeting && !bShiftKeyDown)
 	{
 		const APawn* ControlledPawn = GetPawn();
 		if (FollowTime <= ShortPressThreshold && ControlledPawn)
@@ -215,7 +216,7 @@ void AWitchPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 		return;
 	}
 	//如果是鼠标右键
-	if (bTargeting)//此处逻辑是，例如有一个喷火技能，我们在按住鼠标移动时，此时鼠标没落到敌人身上，我们移动，一旦滑到敌人身上，角色就会释放喷火技能
+	if (bTargeting || bShiftKeyDown)//此处逻辑是，例如有一个喷火技能，我们在按住鼠标移动时，此时鼠标没落到敌人身上，我们移动，一旦滑到敌人身上，角色就会释放喷火技能
 	{
 		if (GetASC())
 		{
