@@ -7,7 +7,7 @@
 #include "CombatInterface.generated.h"
 
 // This class does not need to be modified.
-UINTERFACE(MinimalAPI)
+UINTERFACE(MinimalAPI, BlueprintType)//BlueprintType可以使其在蓝图中可用
 class UCombatInterface : public UInterface
 {
 	GENERATED_BODY()
@@ -26,4 +26,7 @@ public:
 	
 	//用于返回生成投掷物的sockt的transform
 	virtual FVector GetCombatSocketLocation();
+	
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void UpdateFacingTarget(const FVector& Target);
 };

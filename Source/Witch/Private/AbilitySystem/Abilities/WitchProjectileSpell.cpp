@@ -29,6 +29,7 @@ void UWitchProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocat
 	{
 		const FVector SocketLocation = CombatInterface->GetCombatSocketLocation();
 		
+		//火球方向
 		FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
 		Rotation.Pitch = 0.f;
 		
