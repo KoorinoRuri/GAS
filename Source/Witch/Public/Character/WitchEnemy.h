@@ -5,8 +5,11 @@
 #include "CoreMinimal.h"
 #include "Character/WitchCharacterBase.h"
 #include "Interaction/EnemyInterface.h"
+#include "UI/WidgetController/OverlayWidgetController.h"
 #include "WitchEnemy.generated.h"
 
+
+class UWidgetComponent;
 /**
  * 
  */
@@ -27,6 +30,12 @@ public:
 	virtual int32 GetPlayerLevel() override;
 	/* Combat Interface End */
 	
+	//生命值发生变化时，用来广播生命值
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangedSignature OnHealthChanged;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangedSignature OnMaxHealthChanged;
 	
 protected:
 	virtual void BeginPlay() override;
@@ -34,6 +43,9 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Default")
 	int32 Level = 1;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UWidgetComponent> HealthBar;
 private:
 	
 	
