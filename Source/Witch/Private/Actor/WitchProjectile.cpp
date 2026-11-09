@@ -3,6 +3,8 @@
 
 #include "Actor/WitchProjectile.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
@@ -74,6 +76,12 @@ void AWitchProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent,
 	//服务端来销毁火球
 	if (HasAuthority())
 	{
+		//仅在服务端操作，属性变化后会同步到客户端
+		if (UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OtherActor))
+		{
+			TargetASC->ApplyGameplayEffectSpecToSelf(*DamageEffectSpecHandle.Data.Get());
+		}
+		
 		Destroy();
 	}
 	else

@@ -7,7 +7,7 @@
 #include "WitchProjectileSpell.generated.h"
 
 class AWitchProjectile;
-
+class UGameplayEffect;
 /**
  * 
  */
@@ -26,4 +26,7 @@ protected:
 	//要生成的子弹类型
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<AWitchProjectile> ProjectileClass;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<UGameplayEffect> DamageEffectClass;
 };

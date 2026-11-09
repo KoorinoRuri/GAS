@@ -27,6 +27,8 @@ void AWitchEnemy::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this,this);
 	Cast<UWitchAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+	
+	InitializeDefaultAttributes();
 }
 
 void AWitchEnemy::HighLightActor()
