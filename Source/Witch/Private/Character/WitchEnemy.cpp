@@ -4,6 +4,7 @@
 #include "Character/WitchEnemy.h"
 
 #include "AbilitySystem/WitchAbilitySystemComponent.h"
+#include "AbilitySystem/WitchAbilitySystemLibrary.h"
 #include "AbilitySystem/WitchAttributeSet.h"
 #include "Components/WidgetComponent.h"
 #include "UI/Widget/WitchUserWidget.h"
@@ -63,6 +64,11 @@ void AWitchEnemy::InitAbilityActorInfo()
 	Cast<UWitchAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 	
 	InitializeDefaultAttributes();
+}
+
+void AWitchEnemy::InitializeDefaultAttributes() const
+{
+	UWitchAbilitySystemLibrary::InitializeDefaultAttributes(this, CharacterClass, Level, AbilitySystemComponent);
 }
 
 void AWitchEnemy::HighLightActor()

@@ -6,6 +6,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "WitchGameModeBase.generated.h"
 
+class UCharacterClassInfo;
+
 /**
  * 
  */
@@ -14,4 +16,7 @@ class WITCH_API AWitchGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+	UPROPERTY(EditDefaultsOnly, Category="Character Class Defaults")
+	TObjectPtr<UCharacterClassInfo> CharacterClassInfo;
 };

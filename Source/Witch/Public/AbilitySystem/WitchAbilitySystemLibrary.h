@@ -7,8 +7,11 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Data/CharacterClassInfo.h"
 #include "WitchAbilitySystemLibrary.generated.h"
 
+
+class UAbilitySystemComponent;
 class UAttributeMenuWidgetController;
 class UOverlayWidgetController;
 /**
@@ -28,4 +31,8 @@ public:
 	
 	UFUNCTION(BlueprintPure, Category="WitchAbilitySystemLibrary|WidgetController")
 	static UAttributeMenuWidgetController* GetAttributeMenuWidgetController(const UObject* WorldContextObject);
+	
+	//根据角色和等级初始化属性
+	UFUNCTION(BlueprintCallable, Category="WitchAbilitySystemLibrary|CharacterClassDefaults")
+	static void InitializeDefaultAttributes(const UObject* WorldContextObject, ECharacterClass CharacterClass, float level, UAbilitySystemComponent* ASC);
 };
