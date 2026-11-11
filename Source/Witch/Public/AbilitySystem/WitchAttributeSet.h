@@ -166,6 +166,14 @@ public:
 	ATTRIBUTE_ACCESSORS(UWitchAttributeSet, Mana)
 	
 
+	/*
+	 *  Meta Attributes
+	 */
+	
+	//不进行网络复制，属性值是在服务端进行设置的
+	UPROPERTY(BlueprintReadOnly, Category="Meta Attributes")
+	FGameplayAttributeData IncomingDamage;
+	ATTRIBUTE_ACCESSORS(UWitchAttributeSet, IncomingDamage)
 	
 	
 	UFUNCTION()
