@@ -30,6 +30,11 @@ UAbilitySystemComponent* AWitchCharacterBase::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
+UAnimMontage* AWitchCharacterBase::GetHitReactMontage_Implementation()
+{
+	return HitReactMontage;
+}
+
 // Called when the game starts or when spawned
 void AWitchCharacterBase::BeginPlay()
 {

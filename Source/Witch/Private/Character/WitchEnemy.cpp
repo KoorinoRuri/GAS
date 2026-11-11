@@ -9,6 +9,8 @@
 #include "Components/WidgetComponent.h"
 #include "UI/Widget/WitchUserWidget.h"
 #include "Witch/Witch.h"
+#include "WitchGameplayTags.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 AWitchEnemy::AWitchEnemy()
 {
@@ -23,9 +25,17 @@ AWitchEnemy::AWitchEnemy()
 	HealthBar->SetupAttachment(GetRootComponent());
 }
 
+
+void AWitchEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
+{
+	bHitReacting = NewCount > 0;
+	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
+}
+
 void AWitchEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	InitAbilityActorInfo();
 	
 	//设置小部件控制器
@@ -50,6 +60,13 @@ void AWitchEnemy::BeginPlay()
 				OnMaxHealthChanged.Broadcast(Data.NewValue);
 			}
 			);
+		
+		//此处为什么是addUObject？哪里是UObject？
+		AbilitySystemComponent->RegisterGameplayTagEvent(FWitchGameplayTags::Get().Effects_HitReact, EGameplayTagEventType::NewOrRemoved).AddUObject(
+			this,
+			&AWitchEnemy::HitReactTagChanged
+			);
+		
 		//广播初始值
 		OnHealthChanged.Broadcast(WitchAS->GetHealth());
 		OnMaxHealthChanged.Broadcast(WitchAS->GetMaxHealth());

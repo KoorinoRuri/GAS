@@ -12,6 +12,7 @@ class UGameplayEffect;
 class UAbilitySystemComponent;
 class UAttributeSet;
 class UGameplayAbility;
+class UAnimMontage;
 
 UCLASS(Abstract)
 class WITCH_API AWitchCharacterBase : public ACharacter, public IAbilitySystemInterface, public ICombatInterface
@@ -23,6 +24,9 @@ public:
 	AWitchCharacterBase();
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const{ return AttributeSet; };
+	
+	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -65,4 +69,7 @@ private:
 	UPROPERTY(EditAnywhere, Category="Abilities")
 	//游戏一开始就被赋予的能力
 	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
+	
+	UPROPERTY(EditAnywhere, Category="Combat")
+	TObjectPtr<UAnimMontage> HitReactMontage;
 };
