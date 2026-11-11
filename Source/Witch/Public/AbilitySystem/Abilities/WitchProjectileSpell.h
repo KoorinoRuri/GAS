@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystem/Abilities/WitchGameplayAbility.h"
+#include "Witch/Public/WitchGameplayTags.h"
 #include "WitchProjectileSpell.generated.h"
 
 class AWitchProjectile;

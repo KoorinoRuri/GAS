@@ -49,6 +49,12 @@ void UWitchProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocat
 		//把DamageEffectHandle绑定到Projectiles上
 		const UAbilitySystemComponent* SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
 		const FGameplayEffectSpecHandle SpecHandle =  SourceASC->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(), SourceASC->MakeEffectContext());
+		
+		//使用get获取，因为FWitchGameplayTags是单例
+		FWitchGameplayTags GameplayTags = FWitchGameplayTags::Get();
+		//“按调用者设置数值”
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Damage, 50.f);
+		//handle现在携带一个键值对，key：GameplayTags.Damage，value：50.f
 		Projectile->DamageEffectSpecHandle = SpecHandle;
 		
 		
