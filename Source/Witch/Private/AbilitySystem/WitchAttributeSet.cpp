@@ -10,6 +10,8 @@
 #include "Net/UnrealNetwork.h"
 #include "WitchGameplayTags.h"
 #include "Interaction/CombatInterface.h"
+#include "Kismet/GameplayStatics.h"
+#include "Player/WitchPlayerController.h"
 
 UWitchAttributeSet::UWitchAttributeSet()
 {
@@ -133,6 +135,8 @@ void UWitchAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackDat
 	}
 }
 
+
+
 //在GamePlay Effect 修改属性后执行
 //在这里收集尽可能多的有用的数据
 void UWitchAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data)
@@ -173,13 +177,28 @@ void UWitchAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectM
 			else
 			{
 				//需要判断当前角色是否有对应tag再进行激活？
+				//判断逻辑在GA蓝图的ClassSetting中
 				FGameplayTagContainer TagContainer;
 				TagContainer.AddTag(FWitchGameplayTags::Get().Effects_HitReact);
 				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
 			}
+			
+			ShowFloatingText(Props, LocalIncomingDamage);
 		}
 	}
 	
+}
+
+void UWitchAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage) const
+{
+	if (Props.SourceCharacter != Props.TargetCharacter)
+	{
+		//获得本地控制的玩家控制器
+		if (AWitchPlayerController* PC = Cast<AWitchPlayerController>(UGameplayStatics::GetPlayerController(Props.SourceCharacter, 0)))
+		{
+			PC->ShowDamageNumber(Damage, Props.TargetCharacter);
+		}
+	}
 }
 
 //属性回调函数

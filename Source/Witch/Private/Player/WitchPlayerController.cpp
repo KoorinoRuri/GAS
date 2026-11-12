@@ -12,6 +12,8 @@
 #include "Components/SplineComponent.h"
 #include "Input/WitchInputComponent.h"
 #include "Interaction/EnemyInterface.h"
+#include "GameFramework/Character.h"
+#include "UI/Widget/DamageTextComponent.h"
 
 AWitchPlayerController::AWitchPlayerController()
 {
@@ -27,6 +29,23 @@ void AWitchPlayerController::PlayerTick(float DeltaTime)
 	
 	AutoRun();
 	
+}
+
+void AWitchPlayerController::ShowDamageNumber_Implementation(float DamageAmount, ACharacter* TargetCharacter)
+{
+	//IsValid检查是否为空指针，同时检查是否处于待销毁状态
+	if (IsValid(TargetCharacter) && DamageTextComponentClass)
+	{
+		//这里第一个参数不能使用this，会无法显示出伤害飘字
+		UDamageTextComponent* DamageText = NewObject<UDamageTextComponent>(TargetCharacter, DamageTextComponentClass);
+		//手动注册这个Component，而在构造函数里使用CreateDefaultSubobject时，UE会帮我们自动处理
+		DamageText->RegisterComponent();
+		//确保起始位置正确：即受到伤害的敌人的位置
+		//不用Transform创建是因为：这是一个component，不是一个actor，创建方法不一样
+		DamageText->AttachToComponent(TargetCharacter->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+		DamageText->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+		DamageText->SetDamageText(DamageAmount);
+	}
 }
 
 void AWitchPlayerController::AutoRun()
