@@ -37,6 +37,7 @@ void AWitchEnemy::BeginPlay()
 	Super::BeginPlay();
 	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	InitAbilityActorInfo();
+	UWitchAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent);
 	
 	//设置小部件控制器
 	if (UWitchUserWidget* WitchUserWidget = Cast<UWitchUserWidget>(HealthBar->GetUserWidgetObject()))

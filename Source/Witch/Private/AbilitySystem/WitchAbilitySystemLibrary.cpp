@@ -48,11 +48,12 @@ UAttributeMenuWidgetController* UWitchAbilitySystemLibrary::GetAttributeMenuWidg
 
 void UWitchAbilitySystemLibrary::InitializeDefaultAttributes(const UObject* WorldContextObject, ECharacterClass CharacterClass, float level, UAbilitySystemComponent* ASC)
 {
+	//拿到GameMode
 	AWitchGameModeBase* WitchGameMode = Cast<AWitchGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
 	if (!WitchGameMode) return;
 	
 	AActor* AvatarActor = ASC->GetAvatarActor();
-	
+	//拿到ClassInfo
 	UCharacterClassInfo* CharacterClassInfo = WitchGameMode->CharacterClassInfo;
 	//拿到GE
 	FCharacterClassDefaultInfo ClassDefaultInfo = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
@@ -75,4 +76,18 @@ void UWitchAbilitySystemLibrary::InitializeDefaultAttributes(const UObject* Worl
 	
 	const FGameplayEffectSpecHandle VitalAttributesSpecHandle = ASC->MakeOutgoingSpec(CharacterClassInfo->VitalAttribute, level, VitalAttributesContextHandle);
 	ASC->ApplyGameplayEffectSpecToSelf(*VitalAttributesSpecHandle.Data.Get());
+}
+
+void UWitchAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC)
+{
+	AWitchGameModeBase* WitchGameMode = Cast<AWitchGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
+	if (!WitchGameMode) return;
+	
+	UCharacterClassInfo* CharacterClassInfo = WitchGameMode->CharacterClassInfo;
+	
+	for (TSubclassOf<UGameplayAbility> AbilityClass  : CharacterClassInfo->CommonAbilities)
+	{
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
+		ASC->GiveAbility(AbilitySpec);
+	}
 }

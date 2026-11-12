@@ -35,4 +35,8 @@ public:
 	//根据角色和等级初始化属性
 	UFUNCTION(BlueprintCallable, Category="WitchAbilitySystemLibrary|CharacterClassDefaults")
 	static void InitializeDefaultAttributes(const UObject* WorldContextObject, ECharacterClass CharacterClass, float level, UAbilitySystemComponent* ASC);
+	
+	
+	UFUNCTION(BlueprintCallable, Category="WitchAbilitySystemLibrary|CharacterClassDefaults")
+	static void GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC);
 };
