@@ -108,3 +108,10 @@ int32 AWitchEnemy::GetPlayerLevel()
 	return Level;
 	
 }
+
+void AWitchEnemy::Die()
+{
+	SetLifeSpan(LifeSpan);
+	Super::Die();
+	
+}

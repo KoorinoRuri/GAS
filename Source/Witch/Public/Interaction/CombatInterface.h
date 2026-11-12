@@ -35,4 +35,6 @@ public:
 	//要想能在蓝图中调用，还需要加上BlueprintCallable
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	UAnimMontage* GetHitReactMontage();
+	
+	virtual void Die() = 0;
 };

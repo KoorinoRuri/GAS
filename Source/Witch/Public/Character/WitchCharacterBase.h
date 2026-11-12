@@ -27,6 +27,13 @@ public:
 	
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
 	
+	//负责处理 服务端 角色死亡的具体逻辑，只会在服务端调用
+	virtual void Die() override;
+	
+	//负责处理所有客户端上角色死亡的相关逻辑
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastHandleDeath();
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

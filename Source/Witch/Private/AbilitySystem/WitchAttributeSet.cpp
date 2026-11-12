@@ -9,6 +9,7 @@
 #include "LocalizationDescriptor.h"
 #include "Net/UnrealNetwork.h"
 #include "WitchGameplayTags.h"
+#include "Interaction/CombatInterface.h"
 
 UWitchAttributeSet::UWitchAttributeSet()
 {
@@ -161,8 +162,15 @@ void UWitchAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectM
 			const float NewHealth = GetHealth() - LocalIncomingDamage;
 			SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
 			const bool bFatal = NewHealth <= 0.f;
-			
-			if (!bFatal)
+			if (bFatal)
+			{
+				ICombatInterface* CombatInterface = Cast<ICombatInterface>(Props.TargetAvatarActor);
+				if (CombatInterface)
+				{
+					CombatInterface->Die();
+				}
+			}
+			else
 			{
 				//需要判断当前角色是否有对应tag再进行激活？
 				FGameplayTagContainer TagContainer;

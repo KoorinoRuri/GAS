@@ -30,6 +30,7 @@ public:
 	
 	/* Combat Interface */
 	virtual int32 GetPlayerLevel() override;
+	virtual void Die() override;
 	/* Combat Interface End */
 	
 	//生命值发生变化时，用来广播生命值
@@ -46,6 +47,9 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly, Category="Combat")
 	float BaseWalkSpeed = 250.f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Combat")
+	float LifeSpan = 5.f;
 	
 protected:
 	virtual void BeginPlay() override;

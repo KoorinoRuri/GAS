@@ -35,6 +35,29 @@ UAnimMontage* AWitchCharacterBase::GetHitReactMontage_Implementation()
 	return HitReactMontage;
 }
 
+void AWitchCharacterBase::Die()
+{
+	//分离动作会自动同步复制，所以只需服务端分离一次即可
+	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld,true));
+	MulticastHandleDeath();
+}
+
+//Implementation是多播RPC必备的，必须实现
+void AWitchCharacterBase::MulticastHandleDeath_Implementation()
+{
+	Weapon->SetSimulatePhysics(true);
+	Weapon->SetEnableGravity(true);
+	Weapon->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	
+	GetMesh()->SetSimulatePhysics(true);
+	GetMesh()->SetEnableGravity(true);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	GetMesh()->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
+	
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	
+}
+
 // Called when the game starts or when spawned
 void AWitchCharacterBase::BeginPlay()
 {
