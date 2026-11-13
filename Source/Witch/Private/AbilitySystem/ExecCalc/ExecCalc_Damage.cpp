@@ -11,10 +11,12 @@ struct WitchDamageStatics
 	//创建 P##Def
 	//此处其实是MMC中操作的简化
 	DECLARE_ATTRIBUTE_CAPTUREDEF(Armor);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(ArmorPenetration);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(BlockChance);
 	WitchDamageStatics()
 	{
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UWitchAttributeSet, Armor, Target, false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UWitchAttributeSet, ArmorPenetration, Source, false);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UWitchAttributeSet, BlockChance, Target, false);
 	}
 };
@@ -29,6 +31,7 @@ UExecCalc_Damage::UExecCalc_Damage()
 {
 	RelevantAttributesToCapture.Add(DamageStatics().ArmorDef);
 	RelevantAttributesToCapture.Add(DamageStatics().BlockChanceDef);
+	RelevantAttributesToCapture.Add(DamageStatics().ArmorPenetrationDef);
 }
 
 void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
@@ -56,18 +59,32 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ArmorDef, EvaluationParameters,Armor);*/
 	
 	//捕获目标的格挡几率，判断是否发生格挡
-	//如果格挡，削弱伤害
 	float TargetBlockChance = 0.f;
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().BlockChanceDef, EvaluationParameters,TargetBlockChance);
 	TargetBlockChance = FMath::Max(TargetBlockChance, 0.f);
 	
 	const bool bBlocked = FMath::RandRange(1, 100) < TargetBlockChance;
+	
+	//如果格挡，削弱伤害
 	if (bBlocked)
 	{
 		Damage *= 0.5f;
 	}
 	
-	//把 Armor 的值传给EvaluatedData，
+	//捕获护甲
+	float TargetArmor = 0.f;
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ArmorDef, EvaluationParameters,TargetArmor);
+	TargetArmor = FMath::Max(TargetArmor, 0.f);
+	
+	//捕获护甲穿透
+	float SourceArmorPenetration = 0.f;
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ArmorPenetrationDef, EvaluationParameters,SourceArmorPenetration);
+	SourceArmorPenetration = FMath::Max(SourceArmorPenetration, 0.f);
+	
+	const float EffectiveArmor = TargetArmor *= ( 100 - SourceArmorPenetration * 0.25f) / 100.f;
+	Damage *= ( 100 - EffectiveArmor * 0.333f ) / 100.f;
+	
+	//把 Damage 的值传给EvaluatedData，
 	const FGameplayModifierEvaluatedData EvaluatedData(UWitchAttributeSet::GetIncomingDamageAttribute(), EGameplayModOp::Additive, Damage);
 	OutExecutionOutput.AddOutputModifier(EvaluatedData);
 }
