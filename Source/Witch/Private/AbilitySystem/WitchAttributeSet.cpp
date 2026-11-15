@@ -101,6 +101,10 @@ void UWitchAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackDat
 	//source = causer of the effect, target = target of the effect (owner of this AS)
 	
 	//获取 Source 的信息
+	//EffectContextHandle 的 Data 部分是一个 TSharedPtr<FGameplayEffectContext,1>
+	//EffectContext 在 WitchProjectileSpell的 SpawnProjectile 函数中的 SourceASC->MakeEffectContext()创建
+	//其中 Instigator 被设置为 BP_WitchPlayerState，EffectCauser 被设置为 BP_WitchCharacter
+	//PlayerState可以而且经常被推荐用来持有AbilitySystemComponent（ASC）。数据持久化（跨重生保留状态）和 逻辑分离
 	Props.EffectContextHandle = Data.EffectSpec.GetContext();
 	Props.SourceASC = Props.EffectContextHandle.GetOriginalInstigatorAbilitySystemComponent();
 	
