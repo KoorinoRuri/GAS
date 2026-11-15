@@ -50,6 +50,7 @@ void UWitchProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocat
 		const UAbilitySystemComponent* SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
 		
 		//创建EffectContextHandle并设置其中的信息
+		//FGameplayEffectContext是在GameplayEffectTypes里定义的一个结构体
 		FGameplayEffectContextHandle  EffectContextHandle = SourceASC->MakeEffectContext();
 		EffectContextHandle.SetAbility(this);
 		EffectContextHandle.AddSourceObject(Projectile);
