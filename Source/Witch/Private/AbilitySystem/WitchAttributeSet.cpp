@@ -9,6 +9,7 @@
 #include "LocalizationDescriptor.h"
 #include "Net/UnrealNetwork.h"
 #include "WitchGameplayTags.h"
+#include "AbilitySystem/WitchAbilitySystemLibrary.h"
 #include "Interaction/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/WitchPlayerController.h"
@@ -186,14 +187,15 @@ void UWitchAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectM
 				TagContainer.AddTag(FWitchGameplayTags::Get().Effects_HitReact);
 				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
 			}
-			
-			ShowFloatingText(Props, LocalIncomingDamage);
+			const bool bBlock = UWitchAbilitySystemLibrary::IsBlockedHit(Props.EffectContextHandle);
+			const bool bCriticalHit = UWitchAbilitySystemLibrary::IsCriticalHit(Props.EffectContextHandle);
+			ShowFloatingText(Props, LocalIncomingDamage, bBlock, bCriticalHit);
 		}
 	}
 	
 }
 
-void UWitchAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage) const
+void UWitchAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage, bool bBlockedHit, bool bCriticalHit) const
 {
 	if (Props.SourceCharacter != Props.TargetCharacter)
 	{

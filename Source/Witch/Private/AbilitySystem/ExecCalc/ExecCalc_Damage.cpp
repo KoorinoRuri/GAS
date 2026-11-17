@@ -3,6 +3,7 @@
 
 #include "AbilitySystem/ExecCalc/ExecCalc_Damage.h"
 #include "AbilitySystemComponent.h"
+#include "WitchAbilityTypes.h"
 #include "WitchGameplayTags.h"
 #include "AbilitySystem/WitchAbilitySystemLibrary.h"
 #include "AbilitySystem/WitchAttributeSet.h"
@@ -83,6 +84,11 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	
 	const bool bBlocked = FMath::RandRange(1, 100) < TargetBlockChance;
 	
+	//获取Context Handle
+	FGameplayEffectContextHandle EffectContextHandle =  Spec.GetContext();
+	
+	UWitchAbilitySystemLibrary::SetIsBlockedHit(EffectContextHandle, bBlocked);
+	
 	//如果格挡，削弱伤害
 	if (bBlocked)
 	{
@@ -131,6 +137,8 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	//计算有效暴击率
 	const float EffectiveCriticalHitChance = SourceCriticalHitChance - TargetCriticalHitResistance * EffectiveHitResistance;
 	const bool bCriticalHit = FMath::RandRange(1, 100) < EffectiveCriticalHitChance;
+	
+	UWitchAbilitySystemLibrary::SetIsCriticalHit(EffectContextHandle, bCriticalHit);
 	
 	Damage = bCriticalHit ? 2.f * Damage + SourceCriticalHitDamage : Damage;
 	

@@ -11,6 +11,7 @@
 #include "WitchAbilitySystemLibrary.generated.h"
 
 
+struct FGameplayEffectContextHandle;
 class UAbilitySystemComponent;
 class UAttributeMenuWidgetController;
 class UOverlayWidgetController;
@@ -42,4 +43,20 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category="WitchAbilitySystemLibrary|CharacterClassDefaults")
 	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContextObject);
+	
+	//BlueprintPure（蓝图纯函数）的核心作用是定义一个“无副作用”的查询或计算函数。它最直观的特征是在蓝图中生成的节点没有执行引脚（Exec Pins），其执行完全由数据流驱动。
+	//BlueprintPure 最常用于实现 Getter 函数
+	UFUNCTION(BlueprintPure, Category="WitchAbilitySystemLibrary|GameplayEffects")
+	static bool IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle);
+	
+	UFUNCTION(BlueprintPure, Category="WitchAbilitySystemLibrary|GameplayEffects")
+	static bool IsCriticalHit(const FGameplayEffectContextHandle& EffectContextHandle);
+	
+	//注意这里是 BlueprintCallable
+	//UPARAM(ref) 表示这确实是一个输入参数，不加的话蓝图节点会将 非const的& 转化为输出节点，默认函数内会修改
+	UFUNCTION(BlueprintCallable, Category="WitchAbilitySystemLibrary|GameplayEffects")
+	static void SetIsBlockedHit(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, bool bInIsBlockedHit);
+	
+	UFUNCTION(BlueprintCallable, Category="WitchAbilitySystemLibrary|GameplayEffects")
+	static void SetIsCriticalHit(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, bool bInIsCriticalHit);
 };

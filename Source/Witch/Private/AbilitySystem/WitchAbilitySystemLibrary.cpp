@@ -4,6 +4,7 @@
 #include "AbilitySystem/WitchAbilitySystemLibrary.h"
 
 #include "AbilitySystemComponent.h"
+#include "WitchAbilityTypes.h"
 #include "Game/WitchGameModeBase.h"
 #include "UI/WidgetController/WitchWidgetController.h"
 #include "Kismet/GameplayStatics.h"
@@ -95,4 +96,41 @@ UCharacterClassInfo* UWitchAbilitySystemLibrary::GetCharacterClassInfo(const UOb
 	if (!WitchGameMode) return nullptr;
 	
 	return WitchGameMode->CharacterClassInfo;
+}
+
+bool UWitchAbilitySystemLibrary::IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	//注意此处的多个const
+	if (const FWitchGameplayEffectContext* WitchEffectContext = static_cast<const FWitchGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		return WitchEffectContext->IsBlockedHit();
+	}
+	return false;
+}
+
+bool UWitchAbilitySystemLibrary::IsCriticalHit(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	if (const FWitchGameplayEffectContext* WitchEffectContext = static_cast<const FWitchGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		return WitchEffectContext->IsCriticalHit();
+	}
+	return false;
+}
+
+void UWitchAbilitySystemLibrary::SetIsBlockedHit(FGameplayEffectContextHandle& EffectContextHandle,
+	bool bInIsBlockedHit)
+{
+	if (FWitchGameplayEffectContext* WitchEffectContext = static_cast<FWitchGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		WitchEffectContext->SetIsBlockedHit(bInIsBlockedHit);
+	}
+}
+
+void UWitchAbilitySystemLibrary::SetIsCriticalHit(FGameplayEffectContextHandle& EffectContextHandle,
+	bool bInIsCriticalHit)
+{
+	if (FWitchGameplayEffectContext* WitchEffectContext = static_cast<FWitchGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		WitchEffectContext->SetIsCriticalHit(bInIsCriticalHit);
+	}
 }
