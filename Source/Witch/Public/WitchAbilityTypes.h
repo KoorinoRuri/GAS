@@ -21,7 +21,21 @@ public:
 	//此函数来自GameplayEffectTypes，需要重写他
 	virtual UScriptStruct* GetScriptStruct() const
 	{
-		return FGameplayEffectContext::StaticStruct();
+		return StaticStruct();
+	}
+	
+	//此函数来自 GameplayEffectsType.h
+	/** Creates a copy of this context, used to duplicate for later modifications */
+	virtual FWitchGameplayEffectContext* Duplicate() const
+	{
+		FWitchGameplayEffectContext* NewContext = new FWitchGameplayEffectContext();
+		*NewContext = *this;
+		if (GetHitResult())
+		{
+			// Does a deep copy of the hit result
+			NewContext->AddHitResult(*GetHitResult(), true);
+		}
+		return NewContext;
 	}
 	
 	/** Custom serialization, subclasses must override this */
@@ -37,4 +51,14 @@ protected:
 	bool bIsCriticalHit = false;
 	
 private:
+};
+
+template<>
+struct TStructOpsTypeTraits<FWitchGameplayEffectContext> : public TStructOpsTypeTraitsBase2<FWitchGameplayEffectContext>
+{
+	enum
+	{
+		WithNetSerializer = true,
+		WithCopy = true
+	};
 };
