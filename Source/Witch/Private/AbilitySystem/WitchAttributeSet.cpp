@@ -202,7 +202,7 @@ void UWitchAttributeSet::ShowFloatingText(const FEffectProperties& Props, float 
 		//获得本地控制的玩家控制器
 		if (AWitchPlayerController* PC = Cast<AWitchPlayerController>(UGameplayStatics::GetPlayerController(Props.SourceCharacter, 0)))
 		{
-			PC->ShowDamageNumber(Damage, Props.TargetCharacter);
+			PC->ShowDamageNumber(Damage, Props.TargetCharacter, bBlockedHit , bCriticalHit);
 		}
 	}
 }

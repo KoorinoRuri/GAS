@@ -29,7 +29,7 @@ public:
 	//Client：由服务器调用，仅在客户端执行，只发送给拥有该Actor的特定客户端；Reliable：保证到达，自动重试
 	//总结：由服务器发起、定向发送给特定客户端、并保证一定送达的远程过程调用 (RPC)。
 	UFUNCTION(Client, Reliable)
-	void ShowDamageNumber(float DamageAmount, ACharacter* TargetCharacter);
+	void ShowDamageNumber(float DamageAmount, ACharacter* TargetCharacter, bool bBlockedHit, bool bCriticalHit);
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;

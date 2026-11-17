@@ -31,7 +31,7 @@ void AWitchPlayerController::PlayerTick(float DeltaTime)
 	
 }
 
-void AWitchPlayerController::ShowDamageNumber_Implementation(float DamageAmount, ACharacter* TargetCharacter)
+void AWitchPlayerController::ShowDamageNumber_Implementation(float DamageAmount, ACharacter* TargetCharacter, bool bBlockedHit, bool bCriticalHit)
 {
 	//IsValid检查是否为空指针，同时检查是否处于待销毁状态
 	if (IsValid(TargetCharacter) && DamageTextComponentClass)
@@ -44,7 +44,7 @@ void AWitchPlayerController::ShowDamageNumber_Implementation(float DamageAmount,
 		//不用Transform创建是因为：这是一个component，不是一个actor，创建方法不一样
 		DamageText->AttachToComponent(TargetCharacter->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
 		DamageText->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
-		DamageText->SetDamageText(DamageAmount);
+		DamageText->SetDamageText(DamageAmount, bBlockedHit, bCriticalHit);
 	}
 }
 
