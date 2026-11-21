@@ -67,10 +67,13 @@ void UWitchProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocat
 		//使用get获取，因为FWitchGameplayTags是单例
 		const FWitchGameplayTags GameplayTags = FWitchGameplayTags::Get();
 		
-		const float ScaledDamage = Damage.GetValueAtLevel(GetAbilityLevel());
+		for (auto& Pair : DamageTypes)
+		{
+			const float ScaledDamage = Pair.Value.GetValueAtLevel(GetAbilityLevel());
+			//“按调用者设置数值”
+			UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, Pair.Key, ScaledDamage);
+		}
 		
-		//“按调用者设置数值”
-		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Damage, ScaledDamage);
 		//handle现在携带一个键值对，key：GameplayTags.Damage，value：50.f
 		Projectile->DamageEffectSpecHandle = SpecHandle;
 		

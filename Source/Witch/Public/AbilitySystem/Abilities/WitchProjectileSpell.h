@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AbilitySystem/Abilities/WitchGameplayAbility.h"
+#include "AbilitySystem/Abilities/WitchDamageGameplayAbility.h"
 #include "Witch/Public/WitchGameplayTags.h"
 #include "WitchProjectileSpell.generated.h"
 
@@ -13,7 +13,7 @@ class UGameplayEffect;
  * 
  */
 UCLASS()
-class WITCH_API UWitchProjectileSpell : public UWitchGameplayAbility
+class WITCH_API UWitchProjectileSpell : public UWitchDamageGameplayAbility
 {
 	GENERATED_BODY()
 
@@ -28,6 +28,5 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<AWitchProjectile> ProjectileClass;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<UGameplayEffect> DamageEffectClass;
+	
 };
